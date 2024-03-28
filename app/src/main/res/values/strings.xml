@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">OskarTestApp</string>
+    <string name="sign_in">Sign in</string>
+    <string name="don_t_have_an_account_txt">Don\'t have an account?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="already_have_an_account_text">Already have an account?</string>
+</resources>
