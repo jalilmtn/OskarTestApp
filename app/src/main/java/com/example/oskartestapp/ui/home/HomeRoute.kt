@@ -7,7 +7,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.oskartestapp.common.clearAppData
 import com.example.oskartestapp.common.findActivity
-import com.example.oskartestapp.ui.signin.SignInViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

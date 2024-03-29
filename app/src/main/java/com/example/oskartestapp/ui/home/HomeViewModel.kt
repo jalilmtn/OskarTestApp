@@ -4,23 +4,14 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oskartestapp.common.Resource
-import com.example.oskartestapp.di.IoDispatcher
-import com.example.oskartestapp.di.MainDispatcher
-import com.example.oskartestapp.domain.usecases.GetAndSaveLoginFlowUseCase
 import com.example.oskartestapp.domain.usecases.GetAuthFlowUseCase
 import com.example.oskartestapp.domain.usecases.GetAuthUseCase
-import com.example.oskartestapp.domain.usecases.SignInUseCase
-import com.example.oskartestapp.ui.signin.SignInViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,11 +31,11 @@ class HomeViewModel @Inject constructor(
             getAuthUseCase().collectLatest {
                 when (it) {
                     is Resource.Error -> {
-
+                        //TODO: complete later
                     }
 
                     is Resource.Loading -> {
-
+                        //TODO: complete later
                     }
 
                     is Resource.Success -> _state.value = _state.value.copy(
@@ -55,7 +46,7 @@ class HomeViewModel @Inject constructor(
 
             }
         }
-
+        // We can navigate to login page or anything that works for us
         viewModelScope.launch {
             getAuthFlowUseCase().collectLatest {
                 if (it.isCredentialValid.not()) {

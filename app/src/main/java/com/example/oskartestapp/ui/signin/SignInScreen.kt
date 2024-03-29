@@ -38,7 +38,6 @@ import com.example.oskartestapp.R
 import com.example.oskartestapp.ui.components.LargeSpacer
 import com.example.oskartestapp.ui.components.ProgressDialog
 import com.example.oskartestapp.ui.components.SmallSpacer
-import com.example.oskartestapp.ui.signup.State
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

@@ -4,15 +4,9 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oskartestapp.common.Resource
-import com.example.oskartestapp.di.IoDispatcher
-import com.example.oskartestapp.di.MainDispatcher
-import com.example.oskartestapp.domain.usecases.GetAndSaveLoginFlowUseCase
 import com.example.oskartestapp.domain.usecases.GetAndSaveSignUpFlowUseCase
-import com.example.oskartestapp.domain.usecases.GetAuthUseCase
-import com.example.oskartestapp.domain.usecases.SignInUseCase
 import com.example.oskartestapp.domain.usecases.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,9 +25,6 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val getAndSaveSignUpFlowUseCase: GetAndSaveSignUpFlowUseCase,
     private val signUpUseCase: SignUpUseCase,
-    private val getAuthUseCase: GetAuthUseCase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val _state = MutableStateFlow(State())
     val state = _state.asStateFlow()

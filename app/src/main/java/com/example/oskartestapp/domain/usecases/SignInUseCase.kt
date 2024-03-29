@@ -4,12 +4,13 @@ import com.example.oskartestapp.common.ErrorResource
 import com.example.oskartestapp.common.KeyValueKeys
 import com.example.oskartestapp.common.Resource
 import com.example.oskartestapp.data.remote.dto.SignInResponse
+import com.example.oskartestapp.di.IoDispatcher
 import com.example.oskartestapp.domain.model.AuthItem
-import com.example.oskartestapp.domain.repo.AuthRepo
 import com.example.oskartestapp.domain.repo.OryRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class SignInUseCase @Inject constructor(
     private val oryRepository: OryRepository,
     private val saveAuthUseCase: SaveAuthUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
 
     operator fun invoke(
@@ -31,10 +33,12 @@ class SignInUseCase @Inject constructor(
                     emit(Resource.Error(ErrorResource.ERROR))
                     return@flow
                 }
-                val signInResponse = oryRepository.signIn(
-                    flow = flow,
-                    email = email, password = password
-                )
+                val signInResponse = withContext(ioDispatcher) {
+                    oryRepository.signIn(
+                        flow = flow,
+                        email = email, password = password
+                    )
+                }
                 var name: String? = null
                 signInResponse.session.identity.traits.name?.let {
                     name = (it.first ?: "") + " " + (it.last ?: "")
@@ -62,6 +66,8 @@ class SignInUseCase @Inject constructor(
             } catch (e: IOException) {
                 emit(Resource.Error(ErrorResource.IO_ERROR))
                 //cant talk with api
+            } catch (e: Exception) {
+                emit(Resource.Error(ErrorResource.ERROR))
             }
         }
 
