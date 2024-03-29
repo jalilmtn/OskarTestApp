@@ -10,5 +10,6 @@ sealed class Resource<T>(val data: T? = null, val  message: String? = null) {
 enum class ErrorResource(val message: String) {
     IO_ERROR("heck your internet connection"),
     HTTP_ERROR("Something went wrong, please try again"),
-    ERROR("Something went wrong")
+    ERROR("Something went wrong"),
+    VALIDATION("Check your input data and try again")
 }

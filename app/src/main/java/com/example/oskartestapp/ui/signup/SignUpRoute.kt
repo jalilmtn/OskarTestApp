@@ -6,7 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.oskartestapp.ui.signin.SignInViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -32,7 +31,8 @@ fun SignUpRoute(
         changeEmail = signUpViewModel::changeEmail,
         changePassword = signUpViewModel::changePassword,
         signUp = signUpViewModel::signUp,
-        goToSignUp = goToSignIn
+        goToSignUp = goToSignIn,
+        snackBarHostState= snackBarHostState
     )
 
 }

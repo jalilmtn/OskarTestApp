@@ -7,6 +7,7 @@ import com.example.oskartestapp.common.Resource
 import com.example.oskartestapp.domain.usecases.GetAndSaveLoginFlowUseCase
 import com.example.oskartestapp.domain.usecases.GetAuthUseCase
 import com.example.oskartestapp.domain.usecases.SignInUseCase
+import com.example.oskartestapp.domain.usecases.UserPassValidatorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,6 +28,7 @@ class SignInViewModel @Inject constructor(
     private val getAndSaveLoginFlowUseCase: GetAndSaveLoginFlowUseCase,
     private val signInUseCase: SignInUseCase,
     private val getAuthUseCase: GetAuthUseCase,
+    private val userPassValidatorUseCase: UserPassValidatorUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(State())
     val state = _state.asStateFlow()
@@ -66,39 +68,47 @@ class SignInViewModel @Inject constructor(
     fun signIn() {
         viewModelScope.launch {
             mutex.withLock {
-                getAndSaveLoginFlowUseCase().flatMapConcat {
-                    when (it) {
-                        is Resource.Success -> signInUseCase(
-                            it.data?.id,
-                            _state.value.email,
-                            state.value.password
-                        )
+                when(val response = userPassValidatorUseCase.invoke(_state.value.email,
+                    state.value.password)){
+                    is Resource.Error -> _signal.emit(Signal.SnackBarMessage(response.message!!))
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        getAndSaveLoginFlowUseCase().flatMapConcat {
+                            when (it) {
+                                is Resource.Success -> signInUseCase(
+                                    it.data?.id,
+                                    _state.value.email,
+                                    state.value.password
+                                )
 
-                        is Resource.Loading -> {
-                            _state.value = _state.value.copy(isLoading = true)
-                            emptyFlow()
-                        }
+                                is Resource.Loading -> {
+                                    _state.value = _state.value.copy(isLoading = true)
+                                    emptyFlow()
+                                }
 
-                        is Resource.Error -> {
-                            _state.value = _state.value.copy(isLoading = false)
-                            _signal.emit(Signal.SnackBarMessage(it.message!!))
-                            emptyFlow()
-                        }
-                    }
-                }.collectLatest {
-                    when (it) {
-                        is Resource.Error -> {
-                            _state.value = _state.value.copy(isLoading = false)
-                            _signal.emit(Signal.SnackBarMessage(it.message!!))
-                        }
+                                is Resource.Error -> {
+                                    _state.value = _state.value.copy(isLoading = false)
+                                    _signal.emit(Signal.SnackBarMessage(it.message!!))
+                                    emptyFlow()
+                                }
+                            }
+                        }.collectLatest {
+                            when (it) {
+                                is Resource.Error -> {
+                                    _state.value = _state.value.copy(isLoading = false)
+                                    _signal.emit(Signal.SnackBarMessage(it.message!!))
+                                }
 
-                        is Resource.Loading -> Unit
-                        is Resource.Success -> {
-                            _state.value = _state.value.copy(isLoading = false)
-                            _signal.emit(Signal.SuccessLogin)
+                                is Resource.Loading -> Unit
+                                is Resource.Success -> {
+                                    _state.value = _state.value.copy(isLoading = false)
+                                    _signal.emit(Signal.SuccessLogin)
+                                }
+                            }
                         }
                     }
                 }
+
 
             }
         }
