@@ -2,6 +2,7 @@ package com.example.oskartestapp.ui.signin
 
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -73,7 +75,14 @@ fun SignInScreen(
                         value = state.email,
                         onValueChange = changeEmail,
                         label = {
-                            Text(text = stringResource(R.string.email))
+                            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text(text = stringResource(R.string.email))
+                                Text(
+                                    text = "*",
+                                    color = Color.Red,
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            }
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                     )
@@ -83,7 +92,14 @@ fun SignInScreen(
                         value = state.password,
                         onValueChange = changePassword,
                         label = {
-                            Text(text = stringResource(R.string.password))
+                            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text(text = stringResource(R.string.password))
+                                Text(
+                                    text = "*",
+                                    color = Color.Red,
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            }
                         },
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),

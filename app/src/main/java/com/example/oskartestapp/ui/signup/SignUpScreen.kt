@@ -1,6 +1,7 @@
 package com.example.oskartestapp.ui.signup
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,6 +47,8 @@ fun SignUpScreen(
     state: State,
     changeEmail: (String) -> Unit,
     changePassword: (String) -> Unit,
+    changeFirstName: (String) -> Unit,
+    changeLastName: (String) -> Unit,
     signUp: () -> Unit,
     goToSignUp: () -> Unit,
     snackBarHostState: SnackbarHostState,
@@ -74,7 +78,14 @@ fun SignUpScreen(
                         value = state.email,
                         onValueChange = changeEmail,
                         label = {
-                            Text(text = stringResource(R.string.email))
+                            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text(text = stringResource(R.string.email))
+                                Text(
+                                    text = "*",
+                                    color = Color.Red,
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            }
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                     )
@@ -84,7 +95,14 @@ fun SignUpScreen(
                         value = state.password,
                         onValueChange = changePassword,
                         label = {
-                            Text(text = stringResource(R.string.password))
+                            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text(text = stringResource(R.string.password))
+                                Text(
+                                    text = "*",
+                                    color = Color.Red,
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            }
                         },
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -97,6 +115,24 @@ fun SignUpScreen(
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                 Icon(painter = painterResource(id = image), null)
                             }
+                        }
+                    )
+                    SmallSpacer()
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = state.firstName ?: "",
+                        onValueChange = changeFirstName,
+                        label = {
+                            Text(text = stringResource(R.string.first_name))
+                        }
+                    )
+                    SmallSpacer()
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = state.lastName ?: "",
+                        onValueChange = changeLastName,
+                        label = {
+                            Text(text = stringResource(R.string.last_name))
                         }
                     )
                     SmallSpacer()

@@ -3,6 +3,7 @@ package com.example.oskartestapp.data.remote.repo
 import com.example.oskartestapp.data.remote.OryApi
 import com.example.oskartestapp.data.remote.dto.GetLoginFlowResponse
 import com.example.oskartestapp.data.remote.dto.GetSignUpFlowResponse
+import com.example.oskartestapp.data.remote.dto.Name
 import com.example.oskartestapp.data.remote.dto.RegistrationRequest
 import com.example.oskartestapp.data.remote.dto.SignInRequest
 import com.example.oskartestapp.data.remote.dto.SignInResponse
@@ -30,13 +31,15 @@ class OryRepositoryImpl @Inject constructor(
         flow: String,
         email: String,
         password: String,
-        token: String
+        token: String,
+        firstName: String?,
+        lastName: String?
     ): SignUpResponse {
         return api.signUp(
             flow,
             RegistrationRequest(
                 csrf_token = token,
-                traits = Traits(email = email),
+                traits = Traits(email = email, Name(first = firstName, last = lastName)),
                 password = password
             )
         )

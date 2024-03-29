@@ -30,9 +30,11 @@ fun SignUpRoute(
         state,
         changeEmail = signUpViewModel::changeEmail,
         changePassword = signUpViewModel::changePassword,
+        changeFirstName = signUpViewModel::changeFirstName,
+        changeLastName = signUpViewModel::changeLastName,
         signUp = signUpViewModel::signUp,
         goToSignUp = goToSignIn,
-        snackBarHostState= snackBarHostState
+        snackBarHostState = snackBarHostState
     )
 
 }

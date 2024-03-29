@@ -9,11 +9,18 @@ import com.example.oskartestapp.data.remote.dto.SignUpResponse
 interface OryRepository {
     suspend fun getLoginFlow(): GetLoginFlowResponse
     suspend fun getSignUpFlow(): GetSignUpFlowResponse
-    suspend fun signIn(flow: String, email: String, password: String): SignInResponse
+    suspend fun signIn(
+        flow: String,
+        email: String,
+        password: String,
+    ): SignInResponse
+
     suspend fun signUp(
         flow: String,
         email: String,
         password: String,
-        token: String
+        token: String,
+        firstName: String?,
+        lastName: String?
     ): SignUpResponse
 }

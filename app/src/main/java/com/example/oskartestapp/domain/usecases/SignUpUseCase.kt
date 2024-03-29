@@ -4,13 +4,10 @@ import com.example.oskartestapp.common.ErrorResource
 import com.example.oskartestapp.common.KeyValueKeys
 import com.example.oskartestapp.common.Resource
 import com.example.oskartestapp.data.remote.dto.SignUpResponse
-import com.example.oskartestapp.di.IoDispatcher
 import com.example.oskartestapp.domain.model.AuthItem
 import com.example.oskartestapp.domain.repo.OryRepository
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -18,26 +15,28 @@ import javax.inject.Inject
 class SignUpUseCase @Inject constructor(
     private val oryRepository: OryRepository,
     private val saveAuthUseCase: SaveAuthUseCase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
 
     operator fun invoke(
         flow: String,
         email: String,
         password: String,
-        token: String
+        token: String,
+        firstName: String?,
+        lastName: String?
     ): Flow<Resource<SignUpResponse>> =
         flow {
             try {
                 emit(Resource.Loading())
-                val signInResponse = withContext(ioDispatcher) {
+                val signInResponse =
                     oryRepository.signUp(
                         flow = flow,
                         email = email,
                         password = password,
-                        token = token
+                        token = token,
+                        firstName = firstName,
+                        lastName = lastName
                     )
-                }
                 var name: String? = null
                 signInResponse.session.identity.traits.name?.let {
                     name = (it.first ?: "") + " " + (it.last ?: "")

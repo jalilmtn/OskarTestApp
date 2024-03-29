@@ -23,7 +23,9 @@ class FakeOryRepository : OryRepository {
         flow: String,
         email: String,
         password: String,
-        token: String
+        token: String,
+        firstName: String?,
+        lastName: String?
     ): SignUpResponse {
         throw NotImplementedError()
     }

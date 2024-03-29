@@ -42,6 +42,14 @@ class SignUpViewModel @Inject constructor(
         _state.value = _state.value.copy(password = pass)
     }
 
+    fun changeFirstName(name: String) {
+        _state.value = _state.value.copy(firstName = name)
+    }
+
+    fun changeLastName(last: String) {
+        _state.value = _state.value.copy(lastName = last)
+    }
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun signUp() {
@@ -65,7 +73,9 @@ class SignUpViewModel @Inject constructor(
                                     flow = it.data!!.id,
                                     email = _state.value.email,
                                     password = state.value.password,
-                                    token = it.data.ui.nodes[0].attributes.value
+                                    token = it.data.ui.nodes[0].attributes.value,
+                                    firstName = _state.value.firstName,
+                                    lastName = _state.value.lastName
                                 )
 
                                 is Resource.Loading -> {
@@ -112,5 +122,7 @@ class SignUpViewModel @Inject constructor(
 data class State(
     val email: String = "",
     val password: String = "",
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val firstName: String? = null,
+    val lastName: String? = null
 )
